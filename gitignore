@@ -1,0 +1,14 @@
+pycache/
+*.pyc
+*.pyo
+*.pyd
+env/
+venv/
+.idea/
+.vscode/
+.DS_Store
+data/
+tmp/
+*.csv
+*.xlsx
+*.json
