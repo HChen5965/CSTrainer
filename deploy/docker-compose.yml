@@ -1,0 +1,15 @@
+version: '3.8'
+
+# CSTrainer Docker Compose Deployment
+services:
+  cstrainer:
+    build: .
+    container_name: cstrainer
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./deploy:/app/deploy
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

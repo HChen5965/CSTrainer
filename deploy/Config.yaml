@@ -1,0 +1,26 @@
+# CSTrainer System Configuration
+model:
+  model_list:
+    - gpt-4o
+    - deepseek-v4-lite
+    - qwen-3.5
+    - hunyuan
+    - doubao-seed
+  tie_breaker_model: gpt-4o
+
+agent:
+  agent_num_per_cluster: 7
+  judge_agent_num: 3
+  debate_rounds: 2
+
+ontology:
+  ontology_iter_rounds: 5
+  bayesian_weight: 0.6
+  trust_update_step: 0.1
+
+hil:
+  max_hil_rounds: 10
+  feedback_mode: full_comment
+
+task:
+  max_scientific_questions: 5
