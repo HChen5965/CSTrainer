@@ -1,0 +1,6 @@
+from src.app import run_cstrainer
+result = run_cstrainer(
+    user_intent="Intelligent re-evaluation of tight gas wells",
+    historical_research="Log preprocessing completed; need generalization improvement"
+)
+print(result)
