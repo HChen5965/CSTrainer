@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns="http://cstrainer.cnpc.com/ontology/pipeline-risk#"
+    xml:base="http://cstrainer.cnpc.com/ontology/pipeline-risk">
+
+<owl:Ontology rdf:about="">
+    <rdfs:label>Transnational-Pipeline-Risk-Propagation-Ontology-V1.0</rdfs:label>
+    <rdfs:comment>Ontology for coupled risk propagation modeling in transnational natural gas pipeline scheduling</rdfs:comment>
+</owl:Ontology>
+
+<!-- Static Entities -->
+<owl:Class rdf:ID="PipelineEntity"/>
+<owl:Class rdf:ID="CrossBorderPipeline">
+    <rdfs:subClassOf rdf:resource="#PipelineEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="CompressorStation">
+    <rdfs:subClassOf rdf:resource="#PipelineEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="MeteringStation">
+    <rdfs:subClassOf rdf:resource="#PipelineEntity"/>
+</owl:Class>
+
+<owl:Class rdf:ID="RiskEntity"/>
+<owl:Class rdf:ID="GeopoliticalRisk">
+    <rdfs:subClassOf rdf:resource="#RiskEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="WeatherShock">
+    <rdfs:subClassOf rdf:resource="#RiskEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="EquipmentFault">
+    <rdfs:subClassOf rdf:resource="#RiskEntity"/>
+</owl:Class>
+
+<owl:Class rdf:ID="StateEntity"/>
+<owl:Class rdf:ID="Throughput">
+    <rdfs:subClassOf rdf:resource="#StateEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="Pressure">
+    <rdfs:subClassOf rdf:resource="#StateEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="Inventory">
+    <rdfs:subClassOf rdf:resource="#StateEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="Delay">
+    <rdfs:subClassOf rdf:resource="#StateEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="NPT">
+    <rdfs:subClassOf rdf:resource="#StateEntity"/>
+</owl:Class>
+
+<owl:Class rdf:ID="ConstraintEntity"/>
+<owl:Class rdf:ID="ContractFlow">
+    <rdfs:subClassOf rdf:resource="#ConstraintEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="CustomsDelay">
+    <rdfs:subClassOf rdf:resource="#ConstraintEntity"/>
+</owl:Class>
+<owl:Class rdf:ID="MaintenanceWindow">
+    <rdfs:subClassOf rdf:resource="#ConstraintEntity"/>
+</owl:Class>
+
+<!-- Object Properties (Relations) -->
+<owl:ObjectProperty rdf:ID="triggers">
+    <rdfs:domain rdf:resource="#RiskEntity"/>
+    <rdfs:range rdf:resource="#StateEntity"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:ID="propagates_to">
+    <rdfs:domain rdf:resource="#CrossBorderPipeline"/>
+    <rdfs:range rdf:resource="#CrossBorderPipeline"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:ID="increases_delay_of">
+    <rdfs:domain rdf:resource="#RiskEntity"/>
+    <rdfs:range rdf:resource="#Delay"/>
+</owl:ObjectProperty>
+
+<owl:ObjectProperty rdf:ID="couples_with">
+    <rdfs:domain rdf:resource="#RiskEntity"/>
+    <rdfs:range rdf:resource="#RiskEntity"/>
+</owl:ObjectProperty>
+
+<!-- Datatype Properties -->
+<owl:DatatypeProperty rdf:ID="risk_coupling_score">
+    <rdfs:domain rdf:resource="#RiskEntity"/>
+    <rdfs:range rdf:resource="xsd:float"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:ID="delay_propagation_intensity">
+    <rdfs:domain rdf:resource="#CrossBorderPipeline"/>
+    <rdfs:range rdf:resource="xsd:float"/>
+</owl:DatatypeProperty>
+
+<owl:DatatypeProperty rdf:ID="cascading_congestion_prob">
+    <rdfs:domain rdf:resource="#CrossBorderPipeline"/>
+    <rdfs:range rdf:resource="xsd:float"/>
+</owl:DatatypeProperty>
+
+<!-- Constraints (SWRL Rules) -->
+<owl:Class rdf:ID="ConstraintRules">
+    <rdfs:comment>
+    1. Risk coupling intensity ≥ 0.7 → cascading congestion occurs
+    2. Cross-border delay > 3 hours → inventory imbalance > 15%
+    3. Compressor failure + storm → propagation speed doubles
+    </rdfs:comment>
+</owl:Class>
+
+</rdf:RDF>
