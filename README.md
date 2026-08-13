@@ -1,19 +1,17 @@
-# CSTrainer V0.8
+# CSTrainer V1
 **Ontology-driven multiple AIGC agentic approach for oil and gas scientific research supporting**
 
-## 🔍 Overview
-CSTrainer is an ontology-guided multi-agent AI system designed for oil & gas scientific research support.
-It implements the full pipeline from scientific question generation to technical route planning, ontology construction, workflow generation, and model training scheme generation.
 
-## ✨ Features
-- Multi-model collaboration: GPT4O, Hunyuan, DeepSeek, Qwen, Doubao
-- Algorithm 1: Research procedure & skill fitting
-- Algorithm 2: Adaptive multi-agent scientific question generation
-- Distributed ontology construction with weighted Bayesian update
-- Cross-voting mechanism for scheme selection
-- Human-in-the-loop iterative optimization
+> Ontology-Driven Multi-AIGC Agentic Approach for Oil & Gas Scientific Research Supporting.
 
-## 🚀 Quick Start
+## 📌 Core Features
+- **5 Major LLM Agent Cluster Orchestration Engine**: Integrates GPT-4o, DeepSeek-V4, Qwen-3.5, Tencent Hunyuan, and Doubao-Seed 7.0.
+- **Dynamic Bayesian Trust Update**: Iterates Agent trust scores strictly following Equations (1) and (2) in the SPE-235946-MS paper.
+- **Distributed Dynamic Ontology Framework**: Constructs static entity concepts and dynamic route plan constraints to effectively eliminate AIGC hallucinations.
+- **Workflow Matching & Code Compilation**: Matches domain model libraries via cosine similarity and generates executable Python code.
+
+## 🚀 Quick Start with Docker
+
+1. **Configure Environment Variables**:
 ```bash
-pip install -r requirements.txt
-python cstrainer.py
+cp .env.example .env”
