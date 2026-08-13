@@ -13,6 +13,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: |
+        # 优先检测根目录，其次检测子目录
+        if [ -f "Dockerfile" ]; then
+          echo "找到根目录 Dockerfile，开始构建..."
+          docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        elif [ -f "cstrainer-backend/Dockerfile" ]; then
+          echo "找到 cstrainer-backend/Dockerfile，开始构建..."
+          docker build cstrainer-backend --file cstrainer-backend/Dockerfile --tag my-image-name:$(date +%s)
+        else
+          echo "❌ 错误：在 GitHub 仓库中未找到 Dockerfile！"
+          echo "当前仓库文件列表如下："
+          ls -la
+          exit 1
+        fi
