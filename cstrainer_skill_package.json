@@ -1,0 +1,186 @@
+{
+  "package_manifest": {
+    "package_name": "CSTrainer-Skill-Package",
+    "paper_reference": "SPE-235946-MS",
+    "title": "CSTrainer: An Ontology Driven Multiple AIGC Agentic Approach For Oil And Gas Scientific Research Supporting",
+    "version": "1.0.0",
+    "license": "MIT",
+    "status": "Approved Specification",
+    "description": "Standardized skill package containing all 6 core skills, global execution rules, and multi-agent coordination protocols for the CSTrainer AI4S Engine."
+  },
+  "global_execution_rules": {
+    "task_scale_limit": {
+      "min_target_questions": 3,
+      "max_target_questions": 5,
+      "rule_description": "Strictly restrict squeezed research questions to 3-5 to maintain research focus and prevent task volatility."
+    },
+    "human_in_the_loop_bounds": {
+      "recommended_max_rounds": 10,
+      "mode_switch_threshold": 10,
+      "over_limit_strategy": "Switch to binary feedback mode (0/1) to minimize interaction noise and goal drift."
+    },
+    "foundation_models": [
+      "GPT-4o",
+      "DeepSeek-V4",
+      "Qwen-3.5",
+      "Tencent-Hunyuan",
+      "Doubao-Seed 7.0"
+    ]
+  },
+  "skills": [
+    {
+      "skill_id": "SKILL-01",
+      "skill_name": "Evolution_of_Research_Directions",
+      "prompt_name": "Evolution of Research Directions",
+      "target_stage": "Stage 1 - Research Intent Parsing & Direction Squeezing",
+      "version": "1.0.0",
+      "trigger_input": {
+        "user_goal": "User high-level goal G",
+        "top_ideas": "Top 3 high-level ideas I_top",
+        "prior_publications": "User prior publication trajectory P"
+      },
+      "role": "You are an expert machine learning research engineer specializing in scientific idea synthesis, domain-specific oil & gas ontology alignment, and technical writing.",
+      "task": "From the given I_top and historical trajectory P, extract promising research directions that are reusable and instructive for future investigation.",
+      "operation_steps": [
+        {
+          "step": 1,
+          "name": "Extract Directions",
+          "description": "Analyze each I_top and historical context P, and abstract its core research paradigm."
+        },
+        {
+          "step": 2,
+          "name": "Generate Structured Entries",
+          "description": "Create a structured entry for each direction containing required components.",
+          "components": [
+            "Clear Title: Summarize the direction in one sentence.",
+            "Core Mechanism / Hypothesis: The key scientific principle or technical pathway underlying the direction.",
+            "Prospect Justification: Explain why it represents a scientific problem worth refining for user goal G across four dimensions: novelty, feasibility, relevance, and clarity.",
+            "Key Requirements and Assumptions: Data, computational resources, domain tools (e.g., Eclipse, SCADA, Well-logs), or environments required to implement this direction.",
+            "Minimal Validation Experiment Plan: List the 2-4 most critical steps for rapidly verifying the feasibility of this direction."
+          ]
+        }
+      ],
+      "constraints": {
+        "question_scale": "Strictly squeeze and focus on 3-5 core research questions to prevent task volatility.",
+        "hallucination_control": "Constrain reasoning paths strictly within domain-specific static ontology entities."
+      },
+      "output_format": "Merge similar directions, ensure precise, concise, and actionable wording, and enable direct future retrieval and workflow integration."
+    },
+    {
+      "skill_id": "SKILL-02",
+      "skill_name": "Scientific_Problem_Validation_and_Evolution",
+      "prompt_name": "Scientific Problem Validation and Evolution",
+      "target_stage": "Stage 2 & Stage 3 - Hypothesis Verification & Negative Feedback Loop",
+      "version": "1.0.0",
+      "trigger_input": {
+        "proposal": "Final research proposal P",
+        "execution_report": "Experiment execution report W"
+      },
+      "role": "You are a rigorous scientific research auditor and domain ontology supervisor.",
+      "task": "Analyze the experiment report W against proposal P, determine whether proposal P has failed, and summarize lessons learned from it.",
+      "judgment_logic": [
+        "If the engineer finds no executable code in proposal P, then proposal P = failed.",
+        "If the experiment has been completed, but the performance of the proposed method is worse than the baseline method according to the indicator analysis in the report, then proposal P = failed."
+      ],
+      "analysis_requirements": "If judged as failed, conduct a detailed analysis of the root causes of the failure (e.g., invalid hypotheses, unavailable data, infeasible methods, insufficient computational resources, excessive interaction noise).",
+      "output_spec": {
+        "destination": "Unsuccessful directions library in idea memory",
+        "required_fields": [
+          "failed_research_path",
+          "root_cause_category",
+          "detailed_failure_reasons",
+          "preventative_guidance_for_future"
+        ]
+      }
+    },
+    {
+      "skill_id": "SKILL-03",
+      "skill_name": "Experimental_Resolution_and_Evolution",
+      "prompt_name": "Experimental Resolution and Evolution",
+      "target_stage": "Stage 4 & Stage 5 - Code Compilation & Strategy Extraction",
+      "version": "1.0.0",
+      "trigger_input": {
+        "proposal": "Research proposal P",
+        "execution_history": "Complete code search and execution history {H_E(S)}"
+      },
+      "role": "You are a senior full-stack engineer, domain AI architect, and code compiler.",
+      "task": "Distill reusable experimental strategies from successful code and the entire debugging trajectory.",
+      "analysis_focus": {
+        "learn_from_best_code": "From the best code C_best(S) with the best effect at each experimental stage s, extract its data preprocessing process, model construction mode, training skills, and hyperparameter setting strategy.",
+        "learn_from_full_trajectory": "Analyze the typical errors encountered during the entire search process and their solutions, and summarize debugging strategies and environment configuration experience."
+      },
+      "output_spec": {
+        "destination": "Experimental memory repository",
+        "categories": [
+          "Data Processing Strategies (e.g., handling missing well logs, SCADA filtering)",
+          "Model Training Strategies (e.g., physics-informed loss constraints, transfer learning)"
+        ]
+      }
+    },
+    {
+      "skill_id": "SKILL-04",
+      "skill_name": "Multi_Agent_Squeezing_and_Debate",
+      "prompt_name": "Multi-Agent Squeezing and Debate Arbitration",
+      "target_stage": "Multi-LLM Debate Phase",
+      "version": "1.0.0",
+      "trigger_input": {
+        "candidate_directions": "List of N unrefined research candidates",
+        "domain_constraints": "Static entity ontology and dynamic path rules"
+      },
+      "agent_roles": {
+        "Planner": "GPT-4o — Formulates overall strategy and structures the debate rounds.",
+        "Executor": "DeepSeek-V4 — Proposes concrete technical routes and code implementations.",
+        "Debater": "Qwen-3.5 — Challenges assumptions, highlights missing parameters, and tests edge cases.",
+        "Supervisor": "Tencent-Hunyuan — Monitors ontology compliance and evaluates Bayesian entropy.",
+        "Judge": "Doubao-Seed 7.0 & GPT-4o — Conducts cross-model voting and renders final decisions."
+      },
+      "workflow": [
+        "Round 1: Divergence — Executor proposes candidate hypotheses based on Athens RAG.",
+        "Round 2: Debate — Debater identifies technical flaws and domain ontology misalignments.",
+        "Round 3: Convergence — Supervisor evaluates consensus entropy and selects top contenders.",
+        "Round 4: Squeezing — Judge votes on final Top-3 to Top-5 research questions."
+      ],
+      "tie_breaking_protocol": "If cross-model voting results in a tie, GPT-4o acts as the Weighted Arbiter, aligning decisions directly with original user intent G."
+    },
+    {
+      "skill_id": "SKILL-05",
+      "skill_name": "Bayesian_Trust_Update_and_Evaluation",
+      "prompt_name": "Dynamic Bayesian Trust Update and Evaluation",
+      "target_stage": "Agent Trust Evaluation Runtime",
+      "version": "1.0.0",
+      "mathematical_formulation": {
+        "posterior_correctness_formula": "P(correct | V_i) = [P(V_i | correct) * P0] / [P(V_i | correct) * P0 + P(V_i | incorrect) * (1 - P0)]",
+        "trust_update_formula": "P_i(t+1) = P_i(t) * [ omega * P(correct | V_i) + (1 - omega) * sigma_i ]"
+      },
+      "parameters": {
+        "P_i_t": "Prior trust score of agent i at step t",
+        "omega": "Weighting factor balancing judge consensus vs individual execution score (default = 0.6)",
+        "sigma_i": "Execution performance score of agent i output (0.0 to 1.0)",
+        "V_i": "Votes received by agent i proposal from judge cluster",
+        "P0": "Prior baseline accuracy assumption (default = 0.5)"
+      },
+      "boundary_conditions": {
+        "min_trust_floor": 0.05,
+        "max_trust_cap": 0.99
+      }
+    },
+    {
+      "skill_id": "SKILL-06",
+      "skill_name": "Ontology_Alignment_and_Grounding",
+      "prompt_name": "Domain Ontology Alignment and Knowledge Grounding",
+      "target_stage": "Knowledge Representation & Hallucination Elimination",
+      "version": "1.0.0",
+      "trigger_input": {
+        "raw_llm_reasoning": "Unfiltered reasoning chain or generated text",
+        "ontology_schema": "Distributed dynamic ontology graph"
+      },
+      "role": "You are a domain ontology referee and oil & gas knowledge graph architect.",
+      "alignment_rules": [
+        "Verify every technical term against the static concept ontology (e.g., permeability, porosity, bottom-hole pressure).",
+        "Ensure dynamic process workflows adhere to physical boundary conditions (e.g., material balance equations, Darcy's Law).",
+        "Flag any synthetic or ungrounded entity claims as AIGC hallucinations and force reasoning trajectory recalculation."
+      ],
+      "output_format": "Mapped & grounded JSON graph specifying verified entities, dynamic relation links, and invalid hallucination flags."
+    }
+  ]
+}
